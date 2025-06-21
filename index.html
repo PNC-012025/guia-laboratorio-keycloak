@@ -27,7 +27,7 @@
                   environment="web"
                   feedback-link="">
     
-      <google-codelab-step label="Conceptos Basicos" duration="15">
+      <google-codelab-step label="Conceptos Basicos" duration="0">
         <h2 is-upgraded>¿Que es Keycloak?</h2>
 <p>Keycloak es un producto de software de código abierto que permite el inicio de sesión único con gestión de identidades y accesos, diseñado para aplicaciones y servicios modernos.</p>
 <h2 is-upgraded>Patron BFF</h2>
@@ -35,32 +35,48 @@
 <h2 is-upgraded>¿Por que BFF con Keycloak?</h2>
 <p>Usando un patron BFF en nuestro Backend tenemos las siguientes ventajas</p>
 <ul>
-<li>1 - Separacion de preocupaciones <ul>
+<li><h3 is-upgraded>1 - Separacion de preocupaciones</h3>
+<ul>
 <li>El frontend se centra en la UI, y no necesita preocuparse por autenticación compleja ni detalles de autorización.</li>
 <li>El BFF se encarga de la autenticación con Keycloak, gestión de tokens, transformación de datos, y llamadas a APIs internas.</li>
 </ul>
 </li>
-<li>2 - Seguridad y control de acceso <ul>
+<li><h3 is-upgraded>2 - Seguridad y control de acceso</h3>
+<ul>
 <li>El BFF maneja la validación del JWT, verifica roles/permisos y controla qué rutas están permitidas.</li>
 <li>El frontend nunca toca directamente Keycloak ni otros microservicios.</li>
 </ul>
 </li>
-<li>3 - Mejor manejo de tokens <ul>
+<li><h3 is-upgraded>3 - Mejor manejo de tokens</h3>
+<ul>
 <li>El BFF puede usar tokens más seguros (HttpOnly cookies) y mantener tokens de refresco lejos del frontend.</li>
 <li>También puede actuar como proxy para renovar tokens automáticamente.</li>
 </ul>
 </li>
-<li>4 - Customizacion por cliente <ul>
+<li><h3 is-upgraded>4 - Customizacion por cliente</h3>
+<ul>
 <li>Una app móvil puede tener distintos requerimientos de datos que una app web.</li>
 <li>Con BFF, cada frontend tiene su propio backend adaptado a sus necesidades (datos resumidos, transformados, cacheados, etc.).</li>
 </ul>
 </li>
-<li>5 - Facilita cambios sin afectar todo <ul>
+<li><h3 is-upgraded>5 - Facilita cambios sin afectar todo</h3>
+<ul>
 <li>Cambios en un BFF solo afectan a su cliente.</li>
 <li>Es más fácil de probar, desplegar y mantener.</li>
 </ul>
 </li>
 </ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Keycloak con Docker" duration="0">
+        <h2 is-upgraded>Instalacion de una instancia de Keycloak</h2>
+<p>Para esta practica, usaremos una instancia de desarrollo de Keycloak, para esto, utilizaremos docker con la imagen oficial de Keycloak. Para esto, usaremos el siguiente comando:</p>
+<pre><code language="language-bash" class="language-bash">docker run -p 3030:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.2.5 start-dev
+</code></pre>
+<aside class="warning"><p> ⚠️ Aclaracion Por lo general, los puertos utilizados para Keycloak son el 8080:8080, pero para esta ocasion, ya que nuestra api estara corriendo en el puerto 8080, definiremos que estaremos usando el puerto 8080 interno de nuestro contenedor, expuesto en el puerto 3030 de nuestro ordenador.</p>
+</aside>
 <p><strong>Listas</strong></p>
 <ul>
 <li>how to set the amount of time each slide will take to finish</li>
@@ -93,13 +109,6 @@
 </aside>
 <aside class="special"><p> ✅ Esta es una nota positiva. Puedes usarla para resaltar información importante o útil. De igual forma puedes incluir varias líneas de texto. También puedes incluir enlaces, imágenes o cualquier otro tipo de contenido en formato <code>Markdown</code>.</p>
 </aside>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Segunda página" duration="5">
-        <h2 is-upgraded>Subtitulo en otra página</h2>
-<p>Acá puedes incluir más contenido, como texto, imágenes, enlaces, etc.</p>
 
 
       </google-codelab-step>
