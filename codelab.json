@@ -3,7 +3,7 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2025-06-21T16:01:49Z",
+  "updated": "2025-06-21T17:17:48Z",
   "id": "codelab-deployment",
   "duration": 0,
   "title": "Integracion Keycloak con SpringBoot (Con patron BFF)",

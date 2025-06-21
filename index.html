@@ -98,6 +98,73 @@
       </google-codelab-step>
     
       <google-codelab-step label="Configuracion de Keycloak" duration="0">
+        <h2 is-upgraded>Pasos escenciales</h2>
+<p>Una vez que hayamos entrado en la pantalla administrativa de nuestra instancia, necesitaremos hacer numero cosas escenciales, las cuales son:</p>
+<ul>
+<li>Definir un usuario <strong>no temporal</strong></li>
+<li>Crear un realm</li>
+<li>Crear un client</li>
+<li>Definir roles</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Definir un usuario 
+no temporal" duration="0">
+        <p>Si vemos la pantalla inicia de nuestra pantalla de inicio, veremos la siguiente advertencia <img alt="alt-text-here" src="img/28e7e13e328cedc.png"></p>
+<p>Para resolver esta advertencia, deberemos seguir los siguientes pasos:</p>
+<h2 is-upgraded>Acceder a la seccion users</h2>
+<p>En nuestra barra lateral izquierda, encontraremos una lista de funciones o carateristicas a las que podemos acceder, en este caso, haremos clic en la opcion &#34;Users&#34;</p>
+<p class="image-container"><img alt="alt-text-here" src="img/4b16ee1093716d7.png"></p>
+<p>La cual nos mostrara la siguiente seccion</p>
+<p class="image-container"><img alt="alt text" src="img/2378e00450aed660.png"></p>
+<p>En la cual estara registrado solo nuestro usuario temporal llamado <strong>admin</strong>. Haremos clic en el boton azul que dice <strong>Add User</strong>, el cual nos llevara el siguiente formulario</p>
+<p class="image-container"><img alt="alt text" src="img/5268d9c9bd65f13b.png"></p>
+<p>El cual deberemos llenar con los datos que creamos convenientes.</p>
+<aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
+<p>Se debe marcar la casilla de <strong>Email verified</strong>. De lo contrario, el usuario estara marcado como <strong>Usuario sin completar</strong> y podria dificultar algunos proceso.</p>
+</aside>
+<p>Presionamos el boton <strong>Create</strong> y nos llevara a la siguiente etapa</p>
+<p class="image-container"><img alt="alt text" src="img/26459e17887d49b0.png"></p>
+<p>Aca nos interesan dos cosas</p>
+<ul>
+<li>Credentiales</li>
+<li>Role Mapping</li>
+</ul>
+<h2 is-upgraded>Definir credenciales</h2>
+<p>Primero nos dirigiremos a <strong>Credentials</strong>, en donde tendremos que definir la manera en la que nuestro usuario accedera a la seccion administrativa.</p>
+<p class="image-container"><img alt="alt text" src="img/2858b0c10765c9d4.png"></p>
+<p>Presionaremos el boton <strong>Set Password</strong> y llenaremos los campos necesarios.</p>
+<aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
+<p>Debemos asegurarnos que el atributo con el nombre <strong>Temporary</strong> se encuentre en OFF. De lo contrario, despues del primero Login, tendremos que cambiar la contrasena.</p>
+</aside>
+<p>Presionamos <strong>Save</strong> y luego <strong>Save Password</strong> y nuestra contrasena habra sido establecida.</p>
+<h2 is-upgraded>Definir roles</h2>
+<p>Una vez definidas nuestras credenciales, ahora necesitamos definir que el usuario sera el administrador de toda la instancia. Para esto, primero debemos asegurarnos que nos encontramos en el realm <strong>Master</strong>. Para ello, en la barra lateral izquierda, encontraremos la opcion llamada <strong>Manage realms</strong></p>
+<p class="image-container"><img alt="alt text" src="img/53af4be576c3cd9.png"></p>
+<p>Damos clic, y nos aseguramos de que el Realm con el nombre &#34;mastes&#34; se encuentre con la etiqueta <strong>Current realm</strong>, de la siguiente forma</p>
+<p class="image-container"><img alt="alt text" src="img/36731baf75454dac.png"></p>
+<p>Volvemos a nuestra seccion de usuarios, damos clic en el nombre del usuario que habiamos creados en anterioridad y no dirigiremos al apartado de <strong>Role Mapping</strong></p>
+<p class="image-container"><img alt="alt text" src="img/fed023b8c4c97e62.png"></p>
+<p>Daremos clic en el boton <strong>Assign role</strong>, la cual desplegara el siguiente menu:</p>
+<p class="image-container"><img alt="alt text" src="img/f113bba68db82984.png"></p>
+<p>En la parte superior izquierda, encontraremos un icono para filtrar, el cual dice <strong>&#34;Filter by clients&#34;</strong> daremos clic sobre el y seleccionaremos <strong>&#34;Filter by realm roles&#34;</strong>. Los roles mostrados en pantalla se actualizaran, mostrandonos los siguientes:</p>
+<p class="image-container"><img alt="alt text" src="img/13eb37fdf34765c5.png"></p>
+<p>Marcaremos con un cheque el rol que dice <strong>&#34;admin&#34;</strong> y daremos clic en <strong>Assign</strong>.</p>
+<p>Una vez asignado, los roles de nuestro usuario deberia verse asi:</p>
+<p class="image-container"><img alt="alt text" src="img/bb9cd33b3ef05f38.png"></p>
+<aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
+<p>Una vez hecho este proceso, debemos ir a la parte superior derecha, hacer clic sobre el desplegable que dice &#34;admin&#34; y hacer un Sign out para iniciar sesion con el usuario que hemos creado con anterioridad.</p>
+</aside>
+<aside class="warning"><h3 is-upgraded>⚠️ Eliminacion de usuario temporal</h3>
+<p>Cuando hayamos ingresado con nuestro nuevo usuario, deberemos ir al apartado de users y asegurarnos de borrar al usuario temporal para ello solo debemos dar clic en el cheque al lado del usuario y luego presionar el botn &#34;Delete user&#34;.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Crear un realm" duration="0">
         <p><strong>Tablas</strong></p>
 <table>
 <tr><td colspan="1" rowspan="1"><p>Columna 1</p>
