@@ -219,7 +219,7 @@ no temporal" duration="0">
 
       </google-codelab-step>
     
-      <google-codelab-step label="Definicion de roles" duration="0">
+      <google-codelab-step label="Definicion de roles en Client" duration="0">
         <h2 is-upgraded>Realm roles vs Client Roles</h2>
 <p>Ahora que ya hemos creado nuestro client y nuestro realm, hay que definir que roles existiran dentro de nuestro ecosistema. Y es aquin en donde entra la pregunta ¿En donde los creo?. Ya que si nos dirigimos a la barra lateral izquierda, podemos ver la seccion llamada &#34;Real Roles&#34;. Pero si nos vamos a la seccion de clientes y seleccionamos el que creamos con anterioridad, veremos que tambien hay un apartado de roles.</p>
 <h3 is-upgraded>¿Cual es la mejor opcion?</h3>
@@ -231,6 +231,30 @@ no temporal" duration="0">
 <p>En esta ocasion, ya que estamos haciendo un patron BFF y el unico que podra acceder a nuestro Keycloak, es nuestra API a traves de su cliente, optaremos por crear roles en nuestro cliente.</p>
 <p>Para ello, nos dirigimos a la seccion de <strong>Clients</strong> hacemos clic en el que hemos creado, vamos al apartado de <strong>Roles</strong>, damos clic en <strong>Create role</strong> y creamos uno. Ejemplo:</p>
 <p class="image-container"><img alt="alt-text-here" src="img/349c48631fea06b2.png"></p>
+<h2 is-upgraded>Nuestro cliente y sus roles</h2>
+<p>Hemos visto como crear roles para los usuarios que estara registrandose en nuestra API, pero aun no sabemos que permisos tiene nuestro cliente, ya que, si este estara conectandose mediante algun metodo con Keycloak, tambien necesito algun metodo de autenticacion y por ende, sus propios roles. Su metodo de autenticacion ya ha sido definido cuando lo creamos, mediante un <strong>Client secret</strong>. Pero sus roles propios no han sido definidos en ningun momento.</p>
+<p>Para ello, en la pantalla de nuestro Client, nos dirigiremos al apartado de <strong>Service Accounts Roles</strong>, la cual nos mostrara la pantalla siguiente:</p>
+<p class="image-container"><img alt="alt-text-here" src="img/bb23d7ebd16ce0a3.png"></p>
+<p>Daremos clic en <strong>Assign Role</strong> y en la barra de busqueda escribiremos algunas frases y habilitaremos los siguitenes roles</p>
+<ul>
+<li>Buscar: <strong>realm</strong><ul>
+<li>Habilitar: <strong>manage-users</strong></li>
+</ul>
+</li>
+<li>Buscar: <strong>view</strong><ul>
+<li>Habilitar: <strong>view-users</strong></li>
+</ul>
+</li>
+<li>Buscar: <strong>token</strong><ul>
+<li>Habilitar: <strong>read-token</strong></li>
+</ul>
+</li>
+</ul>
+<p>Y los roles de nuestro cliente deberian quedar de la siguiente forma:</p>
+<p class="image-container"><img alt="alt-text-here" src="img/3af88ddc7382187b.png"></p>
+<aside class="special"><h3 is-upgraded>✅ Client configurado con exito</h3>
+<p>Ahora que nuestro Client ha sido configurado correctamente, tiene la capacidad de hacer peticiones a nuestra instancia de Keycloak Todas estas configuraciones serviran para que podamos autenticar usuarios de devolverles su token y algunas otras propiedades que configuraremos mas adelante</p>
+</aside>
 
 
       </google-codelab-step>
