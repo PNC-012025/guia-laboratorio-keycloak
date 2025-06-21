@@ -285,5 +285,60 @@ Y los roles de nuestro cliente deberian quedar de la siguiente forma:
 
 > aside positive
 > #### ✅ Client configurado con exito
-> Ahora que nuestro Client ha sido configurado correctamente, tiene la capacidad de hacer peticiones a nuestra instancia de Keycloak
-> Todas estas configuraciones serviran para que podamos autenticar usuarios de devolverles su token y algunas otras propiedades que configuraremos mas adelante
+> Ahora que nuestro Client ha sido configurado correctamente, tiene la capacidad de hacer peticiones a nuestra instancia de Keycloak.
+> Todas estas configuraciones serviran para que podamos autenticar usuarios de devolverles su token y algunas otras propiedades que configuraremos mas adelante.
+> Al mismo tiempo, estas configuraciones tienen la capacidad de no darle tanto poder administrativo a nuestro client y que solo tenga la capacidad de manejar cosas escenciales
+
+## Configuracion de proyecto con SpringBoot
+
+### Nuevas dependencias
+Ya hemos configurado correctamente nuestro Keycloak para que podamos hacer peticiones desde nuestro backend. Pero nuestro backend aun no esta implementado.
+Para esto, necesitaremos inicializar un nuevo proyecto con algunas dependencias nuevas y unas nuevas configuraciones.
+Primero, iniciaremos un proyecto con las mismas caracteristicas que hemos usado con anterioridad
+
+>aside negative
+> #### ⚠️ Importante
+> Por el momento solo definiremos las tecnologias y caracteristicas generales de nuestra aplicacion. Las dependencias cambiaran.
+
+
+![alt-text-here](./images/InitProyect.png)
+
+Para nuestras dependencias, ahora tendremos unas cuantas nuevas, entre las cuales se encuentran:
+- OpenFein
+- Spring Security
+- OAuth2 Resource Server
+
+Quedando nuestra seccion de dependencias de la siguiente forma:
+
+![alt-text-here](./images/Dependencies.png)
+
+Presionamos **Create** y esperamos a que neustro proyecto haga su build
+
+>aside negative
+> #### ⚠️ Advertencia
+> Si por alguna razon los setters o getters les llegaran a problemas, cambiar la dependencia de lombok por lo siguiente:
+> ```xml
+> <dependencies>
+> 	<dependency>
+>		<groupId>org.projectlombok</groupId>
+>		<artifactId>lombok</artifactId>
+>		<version>1.18.38</version>
+>		<scope>provided</scope>
+>	</dependency>
+></dependencies>
+>```
+>```xml
+>    <plugin>
+>		<groupId>org.apache.maven.plugins</groupId>
+>		<artifactId>maven-compiler-plugin</artifactId>
+>		<configuration>
+>			<annotationProcessorPaths>
+>				<path>
+>					<groupId>org.projectlombok</groupId>
+>					<artifactId>lombok</artifactId>
+>					<version>1.18.38</version>
+>				</path>
+>			</annotationProcessorPaths>
+>		</configuration>
+>	</plugin>
+> ```
