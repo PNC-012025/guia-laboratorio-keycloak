@@ -245,7 +245,7 @@ Damos al boton **Next**, acto seguido,  damos en el boton de **Save**
 > aside positive
 > #### ✅ Client creado con exito.
 
-## Definicion de roles
+## Definicion de roles en Client
 ### Realm roles vs Client Roles
 Ahora que ya hemos creado nuestro client y nuestro realm, hay que definir que roles existiran dentro de nuestro ecosistema.
 Y es aquin en donde entra la pregunta ¿En donde los creo?. Ya que si nos dirigimos a la barra lateral izquierda, podemos ver la seccion llamada "Real Roles". Pero si nos vamos a la seccion de clientes y seleccionamos el que creamos con anterioridad, veremos que tambien hay un apartado de roles.
@@ -263,3 +263,27 @@ Ejemplo:
 
 ![alt-text-here](./images/NewRole.png)
 
+### Nuestro cliente y sus roles
+Hemos visto como crear roles para los usuarios que estara registrandose en nuestra API, pero aun no sabemos que permisos tiene nuestro cliente, ya que, si este estara conectandose mediante algun metodo con Keycloak, tambien necesito algun metodo de autenticacion y por ende, sus propios roles.
+Su metodo de autenticacion ya ha sido definido cuando lo creamos, mediante un **Client secret**. Pero sus roles propios no han sido definidos en ningun momento.
+
+Para ello, en la pantalla de nuestro Client, nos dirigiremos al apartado de **Service Accounts Roles**, la cual nos mostrara la pantalla siguiente:
+
+![alt-text-here](./images/AccountsRoles.png)
+
+Daremos clic en **Assign Role** y en la barra de busqueda escribiremos algunas frases y habilitaremos los siguitenes roles
+- Buscar: **realm**
+    - Habilitar: **manage-users**
+- Buscar: **view**
+    - Habilitar: **view-users**
+- Buscar: **token**
+    - Habilitar: **read-token**
+
+Y los roles de nuestro cliente deberian quedar de la siguiente forma:
+
+![alt-text-here](./images/ClientRoles.png)
+
+> aside positive
+> #### ✅ Client configurado con exito
+> Ahora que nuestro Client ha sido configurado correctamente, tiene la capacidad de hacer peticiones a nuestra instancia de Keycloak
+> Todas estas configuraciones serviran para que podamos autenticar usuarios de devolverles su token y algunas otras propiedades que configuraremos mas adelante
