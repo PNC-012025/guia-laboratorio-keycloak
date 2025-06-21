@@ -1,0 +1,50 @@
+name: Build and Deploy
+
+on: 
+  push:
+    branches: 
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Install claat
+        run: |
+          curl -Lo claat https://github.com/googlecodelabs/tools/releases/latest/download/claat-linux-amd64
+          chmod +x claat
+          sudo mv claat /usr/local/bin/claat
+
+      - name: Export codelab
+        run: |
+          claat export codelab.md
+
+      - name: Inject custom script in index.html
+        run: |
+          file=codelab-deployment/index.html
+          tmpfile=$(mktemp)
+
+          awk '/<\/body>/ {
+            print "<script>"
+            print "  const fabs = document.querySelector(\"#fabs\");"
+            print "  const done = document.querySelector(\"#done\");"
+            print "  const codelabNavButtons = document.querySelector(\"#codelab-nav-buttons\");"
+            print "  const arrowBack = document.querySelector(\"#arrow-back\");"
+            print "  fabs.removeChild(done);"
+            print "  codelabNavButtons.removeChild(arrowBack);"
+            print "</script>"
+          }
+          { print }' "$file" > "$tmpfile"
+
+          mv "$tmpfile" "$file"
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: codelab-deployment
