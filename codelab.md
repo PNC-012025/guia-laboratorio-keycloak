@@ -246,3 +246,20 @@ Damos al boton **Next**, acto seguido,  damos en el boton de **Save**
 > #### ✅ Client creado con exito.
 
 ## Definicion de roles
+### Realm roles vs Client Roles
+Ahora que ya hemos creado nuestro client y nuestro realm, hay que definir que roles existiran dentro de nuestro ecosistema.
+Y es aquin en donde entra la pregunta ¿En donde los creo?. Ya que si nos dirigimos a la barra lateral izquierda, podemos ver la seccion llamada "Real Roles". Pero si nos vamos a la seccion de clientes y seleccionamos el que creamos con anterioridad, veremos que tambien hay un apartado de roles.
+#### ¿Cual es la mejor opcion?
+Pues en realidad, depende de de la orientacion que le queremos dar
+- Realm roles
+Se utiliza cuando queremos que nuestros roles tengan un alcance global en nuestro realm, es decir, independientemente el cliente que se conecte a nuestro realm, los roles seran los mismos
+- Client roles
+Se utiliza cuando se quieren que los roles solo sean creados para un cliente en especifico.
+
+En esta ocasion, ya que estamos haciendo un patron BFF y el unico que podra acceder a nuestro Keycloak, es nuestra API a traves de su cliente, optaremos por crear roles en nuestro cliente.
+
+Para ello, nos dirigimos a la seccion de **Clients** hacemos clic en el que hemos creado, vamos al apartado de **Roles**, damos clic en **Create role** y creamos uno.
+Ejemplo:
+
+![alt-text-here](./images/NewRole.png)
+
