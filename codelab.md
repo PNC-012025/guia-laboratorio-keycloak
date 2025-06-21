@@ -7,7 +7,7 @@ summary: Laboratorio 04 - Programacion N-Capas
 authors: Henry Alexis Flores Lopez
 categories: Programacion, Java, SpringBoot
 
-# Integracion Keycloak con SpringBoot (Con patron BFF)
+# Integracion Keycloak con SpringBoot (Patron BFF)
 
 <!-- ------------------------ -->
 ## Conceptos Basicos 
@@ -171,6 +171,37 @@ Una vez asignado, los roles de nuestro usuario deberia verse asi:
 > para ello solo debemos dar clic en el cheque al lado del usuario y luego presionar el botn "Delete user".
 
 ## Crear un realm
+### ¿Que es un realm?
+Un realm en Keycloak (y en general en contextos de seguridad y autenticación) es una unidad de aislamiento que agrupa usuarios, roles, clientes y configuraciones de seguridad de manera completamente independiente de otros realms.
+
+Es decir, podemos tener multiples realm para distintos sistemas, en donde cada uno de sus usuarios, roles, configuraciones, clientes, etc, son distintos.
+
+### Creando un realm
+Despues de haber creado nuestro usuarios, habernos logeado y borrado el usuario temporal. 
+Necesitamos crear un entorno en donde se estaran almacenando nuestros usuarios, para ello, iremos al apartado de Manage Realms (como lo habiamos hecho con anterioridad)
+
+![alt text](./images/ManageRealms.png)
+
+Y presionaremos el boton **Create realm**, el cual nos desplegara el siguiente formulario
+
+![alt text](./images/NewRealm.png)
+
+En el cual, solo sera necesario llenar el campo de **Realm name**
+
+>aside negative
+> #### ⚠️ Importante
+> Deberemos dejar marcada la opcion de Enabled
+
+> aside positive
+> ✅ Realm creado con exito.
+> Automaticamente nuestro realm haya sido creado, nos daremos cuenta que en la parte superior izquierda, el current realm ha camiado
+> Si esto no sucede, sera necesario que hagamos el cambio manualmente en la seccion de Manage Realms.
+
+## Crear un client
+### ¿Que es un client?
+En el contexto de Keycloak, un Client (cliente) es una aplicación que quiere autenticarse usando Keycloak. Puede ser una app web, un frontend, un backend, una app móvil, una API… cualquier cosa que requiera autenticación/autorización gestionada por Keycloak.
+
+
 
 
 
@@ -181,9 +212,3 @@ Una vez asignado, los roles de nuestro usuario deberia verse asi:
 |-----------|-----------|
 | Valor 1   | Valor 2   | 
 
-
-> aside positive
-> ✅ Esta es una nota positiva.
-> Puedes usarla para resaltar información importante o útil.
-> De igual forma puedes incluir varias líneas de texto.
-> También puedes incluir enlaces, imágenes o cualquier otro tipo de contenido en formato `Markdown`.
