@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>Integracion Keycloak con SpringBoot (Con patron BFF)</title>
+  <title>Integracion Keycloak con SpringBoot (Patron BFF)</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -23,7 +23,7 @@
   <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
   <google-codelab codelab-gaid=""
                   id="codelab-deployment"
-                  title="Integracion Keycloak con SpringBoot (Con patron BFF)"
+                  title="Integracion Keycloak con SpringBoot (Patron BFF)"
                   environment="web"
                   feedback-link="">
     
@@ -165,7 +165,28 @@ no temporal" duration="0">
       </google-codelab-step>
     
       <google-codelab-step label="Crear un realm" duration="0">
-        <p><strong>Tablas</strong></p>
+        <h2 is-upgraded>¿Que es un realm?</h2>
+<p>Un realm en Keycloak (y en general en contextos de seguridad y autenticación) es una unidad de aislamiento que agrupa usuarios, roles, clientes y configuraciones de seguridad de manera completamente independiente de otros realms.</p>
+<p>Es decir, podemos tener multiples realm para distintos sistemas, en donde cada uno de sus usuarios, roles, configuraciones, clientes, etc, son distintos.</p>
+<h2 is-upgraded>Creando un realm</h2>
+<p>Despues de haber creado nuestro usuarios, habernos logeado y borrado el usuario temporal. Necesitamos crear un entorno en donde se estaran almacenando nuestros usuarios, para ello, iremos al apartado de Manage Realms (como lo habiamos hecho con anterioridad)</p>
+<p class="image-container"><img alt="alt text" src="img/53af4be576c3cd9.png"></p>
+<p>Y presionaremos el boton <strong>Create realm</strong>, el cual nos desplegara el siguiente formulario</p>
+<p class="image-container"><img alt="alt text" src="img/6b1164d2118aead5.png"></p>
+<p>En el cual, solo sera necesario llenar el campo de <strong>Realm name</strong></p>
+<aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
+<p>Deberemos dejar marcada la opcion de Enabled</p>
+</aside>
+<aside class="special"><p> ✅ Realm creado con exito. Automaticamente nuestro realm haya sido creado, nos daremos cuenta que en la parte superior izquierda, el current realm ha camiado Si esto no sucede, sera necesario que hagamos el cambio manualmente en la seccion de Manage Realms.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Crear un client" duration="0">
+        <h2 is-upgraded>¿Que es un client?</h2>
+<p>En el contexto de Keycloak, un Client (cliente) es una aplicación que quiere autenticarse usando Keycloak. Puede ser una app web, un frontend, un backend, una app móvil, una API... cualquier cosa que requiera autenticación/autorización gestionada por Keycloak.</p>
+<p><strong>Tablas</strong></p>
 <table>
 <tr><td colspan="1" rowspan="1"><p>Columna 1</p>
 </td><td colspan="1" rowspan="1"><p>Columna 2</p>
@@ -174,8 +195,6 @@ no temporal" duration="0">
 </td><td colspan="1" rowspan="1"><p>Valor 2</p>
 </td></tr>
 </table>
-<aside class="special"><p> ✅ Esta es una nota positiva. Puedes usarla para resaltar información importante o útil. De igual forma puedes incluir varias líneas de texto. También puedes incluir enlaces, imágenes o cualquier otro tipo de contenido en formato <code>Markdown</code>.</p>
-</aside>
 
 
       </google-codelab-step>
