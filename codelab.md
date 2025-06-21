@@ -193,7 +193,7 @@ En el cual, solo sera necesario llenar el campo de **Realm name**
 > Deberemos dejar marcada la opcion de Enabled
 
 > aside positive
-> ✅ Realm creado con exito.
+> #### ✅ Realm creado con exito.
 > Automaticamente nuestro realm haya sido creado, nos daremos cuenta que en la parte superior izquierda, el current realm ha camiado
 > Si esto no sucede, sera necesario que hagamos el cambio manualmente en la seccion de Manage Realms.
 
@@ -201,14 +201,48 @@ En el cual, solo sera necesario llenar el campo de **Realm name**
 ### ¿Que es un client?
 En el contexto de Keycloak, un Client (cliente) es una aplicación que quiere autenticarse usando Keycloak. Puede ser una app web, un frontend, un backend, una app móvil, una API… cualquier cosa que requiera autenticación/autorización gestionada por Keycloak.
 
+### Por que es importante?
+Como su concepto lo dice, son aplicaciones que estaran permitidas a autenticarse y a hacer uso de nuestras instancias de keycloak. Ejemplo: Si queremos crear un usuario, las peticiones deben venir desde una fuente confiable que este autorizada por nuestra instancia.
 
+### Creando un client
+Para crear un Client, debemos dirigirnos a la seccion de Clients en nuestra pantalla de administracion de Keycloak
 
+![alt text](./images/Clients.png)
 
+#### Datos generales
+Una vez en la seccion, presionaremos el boton de **Create client**, el cual nos dirigira al siguiente formulario:
 
+![alt text](./images/ClientForm.png)
 
-**Tablas**
+El cual, para este ejemplo llenaremos de la siguiente manera:
 
-| Columna 1 | Columna 2 |
-|-----------|-----------|
-| Valor 1   | Valor 2   | 
+![alt text](./images/FilledForm.png)
 
+> aside positive
+> #### Significado de campos.
+> - **Client Type**
+> El tipo de conexion y de cliente que se encargara de gestionar la autenticacion, en este caso, OpenID Connect
+> - **Client ID**
+> Idetificador de nuestro Client (importante recordarlo)
+> - **Name**
+> Alias de nuestro cliente
+> - **Description**
+> Una breve descripcion de nuestro cliente
+> - **Always display in UI**
+> Esta opcion es utilizado si no estamos utilizando el patron BFF. Esta opcion mostrara en la pantalla de login a que cliente se quiere logear. En nuestro caso, no es necesario, ya que las operaciones se estaran realizando a traves de nuestra api.
+
+#### Metodos de autenticacion
+Al haber llenado los campos y presionar el boton **Next**, nos dirigira al formulario de metodos de autenticacion. En el cual, para nuestro caso, configuraremos de la siguiente manera:
+
+![alt text](./images/Capability.png)
+
+Damos al boton **Next**, acto seguido,  damos en el boton de **Save** 
+
+>aside negative
+> #### ⚠️ Importante
+> Los campos del formulario **Loggin Settings** no deben llenarse para esta ocasion
+
+> aside positive
+> #### ✅ Client creado con exito.
+
+## Definicion de roles
