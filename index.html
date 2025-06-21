@@ -177,7 +177,8 @@ no temporal" duration="0">
 <aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
 <p>Deberemos dejar marcada la opcion de Enabled</p>
 </aside>
-<aside class="special"><p> ✅ Realm creado con exito. Automaticamente nuestro realm haya sido creado, nos daremos cuenta que en la parte superior izquierda, el current realm ha camiado Si esto no sucede, sera necesario que hagamos el cambio manualmente en la seccion de Manage Realms.</p>
+<aside class="special"><h3 is-upgraded>✅ Realm creado con exito.</h3>
+<p>Automaticamente nuestro realm haya sido creado, nos daremos cuenta que en la parte superior izquierda, el current realm ha camiado Si esto no sucede, sera necesario que hagamos el cambio manualmente en la seccion de Manage Realms.</p>
 </aside>
 
 
@@ -186,16 +187,40 @@ no temporal" duration="0">
       <google-codelab-step label="Crear un client" duration="0">
         <h2 is-upgraded>¿Que es un client?</h2>
 <p>En el contexto de Keycloak, un Client (cliente) es una aplicación que quiere autenticarse usando Keycloak. Puede ser una app web, un frontend, un backend, una app móvil, una API... cualquier cosa que requiera autenticación/autorización gestionada por Keycloak.</p>
-<p><strong>Tablas</strong></p>
-<table>
-<tr><td colspan="1" rowspan="1"><p>Columna 1</p>
-</td><td colspan="1" rowspan="1"><p>Columna 2</p>
-</td></tr>
-<tr><td colspan="1" rowspan="1"><p>Valor 1</p>
-</td><td colspan="1" rowspan="1"><p>Valor 2</p>
-</td></tr>
-</table>
+<h2 is-upgraded>Por que es importante?</h2>
+<p>Como su concepto lo dice, son aplicaciones que estaran permitidas a autenticarse y a hacer uso de nuestras instancias de keycloak. Ejemplo: Si queremos crear un usuario, las peticiones deben venir desde una fuente confiable que este autorizada por nuestra instancia.</p>
+<h2 is-upgraded>Creando un client</h2>
+<p>Para crear un Client, debemos dirigirnos a la seccion de Clients en nuestra pantalla de administracion de Keycloak</p>
+<p class="image-container"><img alt="alt text" src="img/c7cd4a3c3355a455.png"></p>
+<h3 is-upgraded>Datos generales</h3>
+<p>Una vez en la seccion, presionaremos el boton de <strong>Create client</strong>, el cual nos dirigira al siguiente formulario:</p>
+<p class="image-container"><img alt="alt text" src="img/5765e87b34141f73.png"></p>
+<p>El cual, para este ejemplo llenaremos de la siguiente manera:</p>
+<p class="image-container"><img alt="alt text" src="img/d84eedd6b544bc97.png"></p>
+<aside class="special"><h3 is-upgraded>Significado de campos.</h3>
+<ul>
+<li><strong>Client Type</strong> El tipo de conexion y de cliente que se encargara de gestionar la autenticacion, en este caso, OpenID Connect</li>
+<li><strong>Client ID</strong> Idetificador de nuestro Client (importante recordarlo)</li>
+<li><strong>Name</strong> Alias de nuestro cliente</li>
+<li><strong>Description</strong> Una breve descripcion de nuestro cliente</li>
+<li><strong>Always display in UI</strong> Esta opcion es utilizado si no estamos utilizando el patron BFF. Esta opcion mostrara en la pantalla de login a que cliente se quiere logear. En nuestro caso, no es necesario, ya que las operaciones se estaran realizando a traves de nuestra api.</li>
+</ul>
+</aside>
+<h3 is-upgraded>Metodos de autenticacion</h3>
+<p>Al haber llenado los campos y presionar el boton <strong>Next</strong>, nos dirigira al formulario de metodos de autenticacion. En el cual, para nuestro caso, configuraremos de la siguiente manera:</p>
+<p class="image-container"><img alt="alt text" src="img/9575467e046ba571.png"></p>
+<p>Damos al boton <strong>Next</strong>, acto seguido,  damos en el boton de <strong>Save</strong></p>
+<aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
+<p>Los campos del formulario <strong>Loggin Settings</strong> no deben llenarse para esta ocasion</p>
+</aside>
+<aside class="special"><h3 is-upgraded>✅ Client creado con exito.</h3>
+</aside>
 
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Definicion de roles" duration="0">
+        
 
       </google-codelab-step>
     
