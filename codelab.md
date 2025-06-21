@@ -43,8 +43,17 @@ Para esto, usaremos el siguiente comando:
 docker run -p 3030:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.2.5 start-dev
 ```
 >aside negative
-> ⚠️ Aclaracion
+> #### ⚠️ Aclaracion
 > Por lo general, los puertos utilizados para Keycloak son el 8080:8080, pero para esta ocasion, ya que nuestra api estara corriendo en el puerto 8080, definiremos que estaremos usando el puerto 8080 interno de nuestro contenedor, expuesto en el puerto 3030 de nuestro ordenador.
+
+### Acceso a la terminal administrativa
+La primera vez que realicemos este proceso, puede que tarde un poco, ya que se tendra que descargar la imagen a utilizar.
+Una vez que la imagen haya sido descargada y que la instancia este corriendo, accederemos a la siguiente ruta
+
+[Ruta de la instancia](http://localhost:3030/admin)
+
+En la que debera verse la siguiente pantalla
+![alt-text-here](./images/WelcomeImage.png)
 
 **Listas**
 
