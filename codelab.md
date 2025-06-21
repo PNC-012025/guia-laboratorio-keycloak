@@ -76,6 +76,103 @@ Si hemos ingresado los datos correctamente, deberiamos acceder a la siguiente pa
 
 ## Configuracion de Keycloak
 
+### Pasos escenciales
+Una vez que hayamos entrado en la pantalla administrativa de nuestra instancia, necesitaremos hacer numero cosas escenciales, las cuales son:
+- Definir un usuario **no temporal**
+- Crear un realm
+- Crear un client
+- Definir roles
+
+## Definir un usuario **no temporal**
+Si vemos la pantalla inicia de nuestra pantalla de inicio, veremos la siguiente advertencia
+![alt-text-here](./images/Warning.png)
+
+Para resolver esta advertencia, deberemos seguir los siguientes pasos:
+
+### Acceder a la seccion users
+En nuestra barra lateral izquierda, encontraremos una lista de funciones o carateristicas a las que podemos acceder, en este caso, haremos clic en la opcion "Users"
+
+![alt-text-here](./images/Users.png)
+
+La cual nos mostrara la siguiente seccion
+
+![alt text](./images/SectionUsers.png)
+
+En la cual estara registrado solo nuestro usuario temporal llamado **admin**. 
+Haremos clic en el boton azul que dice **Add User**, el cual nos llevara el siguiente formulario
+
+![alt text](./images/UserForm.png)
+
+El cual deberemos llenar con los datos que creamos convenientes.
+
+>aside negative
+> #### ⚠️ Importante
+> Se debe marcar la casilla de **Email verified**. De lo contrario, el usuario estara marcado como **Usuario sin completar** y podria dificultar algunos proceso.
+
+Presionamos el boton **Create** y nos llevara a la siguiente etapa
+
+![alt text](./images/CreatedUser.png)
+
+Aca nos interesan dos cosas
+- Credentiales
+- Role Mapping
+
+### Definir credenciales
+Primero nos dirigiremos a **Credentials**, en donde tendremos que definir la manera en la que nuestro usuario accedera a la seccion administrativa.
+
+![alt text](./images/CredentialsScreen.png)
+
+Presionaremos el boton **Set Password** y llenaremos los campos necesarios.
+
+>aside negative
+> #### ⚠️ Importante
+> Debemos asegurarnos que el atributo con el nombre **Temporary** se encuentre en OFF. De lo contrario, despues del primero Login, tendremos que cambiar la contrasena.
+
+Presionamos **Save** y luego **Save Password** y nuestra contrasena habra sido establecida. 
+
+
+### Definir roles
+Una vez definidas nuestras credenciales, ahora necesitamos definir que el usuario sera el administrador de toda la instancia.
+Para esto, primero debemos asegurarnos que nos encontramos en el realm **Master**.
+Para ello, en la barra lateral izquierda, encontraremos la opcion llamada **Manage realms**
+
+![alt text](./images/ManageRealms.png)
+
+Damos clic, y nos aseguramos de que el Realm con el nombre "mastes" se encuentre con la etiqueta **Current realm**, de la siguiente forma
+
+![alt text](./images/MasterCurrentRealm.png)
+
+Volvemos a nuestra seccion de usuarios, damos clic en el nombre del usuario que habiamos creados en anterioridad y no dirigiremos al apartado de **Role Mapping**
+
+![alt text](./images/RoleMapping.png)
+
+Daremos clic en el boton **Assign role**, la cual desplegara el siguiente menu:
+
+![alt text](./images/RoleAssign.png)
+
+En la parte superior izquierda, encontraremos un icono para filtrar, el cual dice **"Filter by clients"** daremos clic sobre el y seleccionaremos **"Filter by realm roles"**.
+Los roles mostrados en pantalla se actualizaran, mostrandonos los siguientes:
+
+![alt text](./images/RealmRoles.png)
+
+Marcaremos con un cheque el rol que dice **"admin"** y daremos clic en **Assign**.
+
+Una vez asignado, los roles de nuestro usuario deberia verse asi:
+
+![alt text](./images/RoleAssigned.png)
+
+>aside negative
+> #### ⚠️ Importante
+> Una vez hecho este proceso, debemos ir a la parte superior derecha, hacer clic sobre el desplegable que dice "admin" y hacer un Sign out para iniciar sesion con el usuario que hemos creado con anterioridad.
+
+>aside negative
+> #### ⚠️ Eliminacion de usuario temporal
+> Cuando hayamos ingresado con nuestro nuevo usuario, deberemos ir al apartado de users y asegurarnos de borrar al usuario temporal
+> para ello solo debemos dar clic en el cheque al lado del usuario y luego presionar el botn "Delete user".
+
+## Crear un realm
+
+
 
 
 **Tablas**
