@@ -253,7 +253,53 @@ no temporal" duration="0">
 <p>Y los roles de nuestro cliente deberian quedar de la siguiente forma:</p>
 <p class="image-container"><img alt="alt-text-here" src="img/3af88ddc7382187b.png"></p>
 <aside class="special"><h3 is-upgraded>✅ Client configurado con exito</h3>
-<p>Ahora que nuestro Client ha sido configurado correctamente, tiene la capacidad de hacer peticiones a nuestra instancia de Keycloak Todas estas configuraciones serviran para que podamos autenticar usuarios de devolverles su token y algunas otras propiedades que configuraremos mas adelante</p>
+<p>Ahora que nuestro Client ha sido configurado correctamente, tiene la capacidad de hacer peticiones a nuestra instancia de Keycloak. Todas estas configuraciones serviran para que podamos autenticar usuarios de devolverles su token y algunas otras propiedades que configuraremos mas adelante. Al mismo tiempo, estas configuraciones tienen la capacidad de no darle tanto poder administrativo a nuestro client y que solo tenga la capacidad de manejar cosas escenciales</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configuracion de proyecto con SpringBoot" duration="0">
+        <h2 is-upgraded>Nuevas dependencias</h2>
+<p>Ya hemos configurado correctamente nuestro Keycloak para que podamos hacer peticiones desde nuestro backend. Pero nuestro backend aun no esta implementado. Para esto, necesitaremos inicializar un nuevo proyecto con algunas dependencias nuevas y unas nuevas configuraciones. Primero, iniciaremos un proyecto con las mismas caracteristicas que hemos usado con anterioridad</p>
+<aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
+<p>Por el momento solo definiremos las tecnologias y caracteristicas generales de nuestra aplicacion. Las dependencias cambiaran.</p>
+</aside>
+<p class="image-container"><img alt="alt-text-here" src="img/3e91b64c64656a05.png"></p>
+<p>Para nuestras dependencias, ahora tendremos unas cuantas nuevas, entre las cuales se encuentran:</p>
+<ul>
+<li>OpenFein</li>
+<li>Spring Security</li>
+<li>OAuth2 Resource Server</li>
+</ul>
+<p>Quedando nuestra seccion de dependencias de la siguiente forma:</p>
+<p class="image-container"><img alt="alt-text-here" src="img/2d9cd5286822fbe5.png"></p>
+<p>Presionamos <strong>Create</strong> y esperamos a que neustro proyecto haga su build</p>
+<aside class="warning"><h3 is-upgraded>⚠️ Advertencia</h3>
+<p>Si por alguna razon los setters o getters les llegaran a problemas, cambiar la dependencia de lombok por lo siguiente:</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependencies&gt;
+	&lt;dependency&gt;
+  	&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+  	&lt;artifactId&gt;lombok&lt;/artifactId&gt;
+  	&lt;version&gt;1.18.38&lt;/version&gt;
+  	&lt;scope&gt;provided&lt;/scope&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<pre><code language="language-xml" class="language-xml">   &lt;plugin&gt;
+  	&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  	&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+  	&lt;configuration&gt;
+  		&lt;annotationProcessorPaths&gt;
+  			&lt;path&gt;
+  				&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+  				&lt;artifactId&gt;lombok&lt;/artifactId&gt;
+  				&lt;version&gt;1.18.38&lt;/version&gt;
+  			&lt;/path&gt;
+  		&lt;/annotationProcessorPaths&gt;
+  	&lt;/configuration&gt;
+  &lt;/plugin&gt;
+</code></pre>
 </aside>
 
 
