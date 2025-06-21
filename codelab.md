@@ -11,11 +11,7 @@ categories: Programacion, Java, SpringBoot
 
 <!-- ------------------------ -->
 ## Conceptos Basicos 
-<!-- Duración de esta sección, en formato hh:mm:ss  -->
-Duration: 00:15:00 
-
 ### ¿Que es Keycloak?
-
 Keycloak es un producto de software de código abierto que permite el inicio de sesión único con gestión de identidades y accesos, diseñado para aplicaciones y servicios modernos.
 
 ### Patron BFF
@@ -23,21 +19,32 @@ El patrón BFF hace referencia al concepto de Backend For FrontEnd. Cuando nosot
 
 ### ¿Por que BFF con Keycloak?
 Usando un patron BFF en nuestro Backend tenemos las siguientes ventajas
-- 1 - Separacion de preocupaciones
+- #### 1 - Separacion de preocupaciones
     - El frontend se centra en la UI, y no necesita preocuparse por autenticación compleja ni detalles de autorización.
     - El BFF se encarga de la autenticación con Keycloak, gestión de tokens, transformación de datos, y llamadas a APIs internas.
-- 2 - Seguridad y control de acceso
+- #### 2 - Seguridad y control de acceso
     - El BFF maneja la validación del JWT, verifica roles/permisos y controla qué rutas están permitidas.
     - El frontend nunca toca directamente Keycloak ni otros microservicios.
-- 3 - Mejor manejo de tokens
+- #### 3 - Mejor manejo de tokens
     - El BFF puede usar tokens más seguros (HttpOnly cookies) y mantener tokens de refresco lejos del frontend.
     - También puede actuar como proxy para renovar tokens automáticamente.
-- 4 - Customizacion por cliente
+- #### 4 - Customizacion por cliente
     - Una app móvil puede tener distintos requerimientos de datos que una app web.
     - Con BFF, cada frontend tiene su propio backend adaptado a sus necesidades (datos resumidos, transformados, cacheados, etc.).
-- 5 - Facilita cambios sin afectar todo
+- #### 5 - Facilita cambios sin afectar todo
     - Cambios en un BFF solo afectan a su cliente.
     - Es más fácil de probar, desplegar y mantener.
+
+## Keycloak con Docker
+### Instalacion de una instancia de Keycloak
+Para esta practica, usaremos una instancia de desarrollo de Keycloak, para esto, utilizaremos docker con la imagen oficial de Keycloak.
+Para esto, usaremos el siguiente comando:
+```bash
+docker run -p 3030:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.2.5 start-dev
+```
+>aside negative
+> ⚠️ Aclaracion
+> Por lo general, los puertos utilizados para Keycloak son el 8080:8080, pero para esta ocasion, ya que nuestra api estara corriendo en el puerto 8080, definiremos que estaremos usando el puerto 8080 interno de nuestro contenedor, expuesto en el puerto 3030 de nuestro ordenador.
 
 **Listas**
 
@@ -84,11 +91,3 @@ console.log("Este es un bloque de código");
 > Puedes usarla para resaltar información importante o útil.
 > De igual forma puedes incluir varias líneas de texto.
 > También puedes incluir enlaces, imágenes o cualquier otro tipo de contenido en formato `Markdown`.
-
-<!-- ------------------------ -->
-## Segunda página
-Duration: 00:5:00
-
-### Subtitulo en otra página
-
-Acá puedes incluir más contenido, como texto, imágenes, enlaces, etc.
