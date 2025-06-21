@@ -53,30 +53,30 @@ Una vez que la imagen haya sido descargada y que la instancia este corriendo, ac
 [Ruta de la instancia](http://localhost:3030/admin)
 
 En la que debera verse la siguiente pantalla
+
 ![alt-text-here](./images/WelcomeImage.png)
 
-**Listas**
 
-- how to set the amount of time each slide will take to finish 
-- how to include code snippets 
-- how to hyperlink items 
-- how to include images 
-- other stuff
+Una vez en esta pantalla, necesitamos las credenciales que hemos determinado en el comando de la creacion de instancia
 
-
-**Bloques de código**
-
-```js
-console.log("Este es un bloque de código");
+```bash
+KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin
 ```
 
-**Enlaces**
+En estos parametros es donde se definen las crecenciales de nuestro usuario **temporal**.
+Por tanto, nuestras credenciales seran:
+#### Username or email
+admin
+#### Password
+admin
 
-[Youtube](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+Si hemos ingresado los datos correctamente, deberiamos acceder a la siguiente pantalla
 
-**Imágenes**
+![alt-text-here](./images/FirstScreenKeycloak.png)
 
-![alt-text-here](./images/example.png)
+## Configuracion de Keycloak
+
+
 
 **Tablas**
 
@@ -84,16 +84,6 @@ console.log("Este es un bloque de código");
 |-----------|-----------|
 | Valor 1   | Valor 2   | 
 
-**Notas**
-
-> aside negative
-> ⚠️ Esta es una nota de advertencia o de información importante.
-> Puedes incluir varias líneas de texto en una nota.
-> También puedes incluir código:
-> ```js
-> console.log("Este es un bloque de código");
-> ```
-> O puedes incluir cualquier otro tipo de contenido en formato Markdown.
 
 > aside positive
 > ✅ Esta es una nota positiva.
