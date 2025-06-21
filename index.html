@@ -81,23 +81,24 @@
 <h2 is-upgraded>Acceso a la terminal administrativa</h2>
 <p>La primera vez que realicemos este proceso, puede que tarde un poco, ya que se tendra que descargar la imagen a utilizar. Una vez que la imagen haya sido descargada y que la instancia este corriendo, accederemos a la siguiente ruta</p>
 <p><a href="http://localhost:3030/admin" target="_blank">Ruta de la instancia</a></p>
-<p>En la que debera verse la siguiente pantalla <img alt="alt-text-here" src="img/b948df5b49f74f2c.png"></p>
-<p><strong>Listas</strong></p>
-<ul>
-<li>how to set the amount of time each slide will take to finish</li>
-<li>how to include code snippets</li>
-<li>how to hyperlink items</li>
-<li>how to include images</li>
-<li>other stuff</li>
-</ul>
-<p><strong>Bloques de código</strong></p>
-<pre><code language="language-js" class="language-js">console.log(&#34;Este es un bloque de código&#34;);
+<p>En la que debera verse la siguiente pantalla</p>
+<p class="image-container"><img alt="alt-text-here" src="img/b948df5b49f74f2c.png"></p>
+<p>Una vez en esta pantalla, necesitamos las credenciales que hemos determinado en el comando de la creacion de instancia</p>
+<pre><code language="language-bash" class="language-bash">KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin
 </code></pre>
-<p><strong>Enlaces</strong></p>
-<p><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Youtube</a></p>
-<p><strong>Imágenes</strong></p>
-<p class="image-container"><img alt="alt-text-here" src="img/1314220771139fd7.png"></p>
-<p><strong>Tablas</strong></p>
+<p>En estos parametros es donde se definen las crecenciales de nuestro usuario <strong>temporal</strong>. Por tanto, nuestras credenciales seran:</p>
+<h3 is-upgraded>Username or email</h3>
+<p>admin</p>
+<h3 is-upgraded>Password</h3>
+<p>admin</p>
+<p>Si hemos ingresado los datos correctamente, deberiamos acceder a la siguiente pantalla</p>
+<p class="image-container"><img alt="alt-text-here" src="img/75c24a39edfe77ad.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configuracion de Keycloak" duration="0">
+        <p><strong>Tablas</strong></p>
 <table>
 <tr><td colspan="1" rowspan="1"><p>Columna 1</p>
 </td><td colspan="1" rowspan="1"><p>Columna 2</p>
@@ -106,12 +107,6 @@
 </td><td colspan="1" rowspan="1"><p>Valor 2</p>
 </td></tr>
 </table>
-<p><strong>Notas</strong></p>
-<aside class="warning"><p> ⚠️ Esta es una nota de advertencia o de información importante. Puedes incluir varias líneas de texto en una nota. También puedes incluir código:</p>
-<pre><code language="language-js" class="language-js">console.log(&#34;Este es un bloque de código&#34;);
-</code></pre>
-<p>O puedes incluir cualquier otro tipo de contenido en formato Markdown.</p>
-</aside>
 <aside class="special"><p> ✅ Esta es una nota positiva. Puedes usarla para resaltar información importante o útil. De igual forma puedes incluir varias líneas de texto. También puedes incluir enlaces, imágenes o cualquier otro tipo de contenido en formato <code>Markdown</code>.</p>
 </aside>
 
