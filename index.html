@@ -75,8 +75,13 @@
 <p>Para esta practica, usaremos una instancia de desarrollo de Keycloak, para esto, utilizaremos docker con la imagen oficial de Keycloak. Para esto, usaremos el siguiente comando:</p>
 <pre><code language="language-bash" class="language-bash">docker run -p 3030:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.2.5 start-dev
 </code></pre>
-<aside class="warning"><p> ⚠️ Aclaracion Por lo general, los puertos utilizados para Keycloak son el 8080:8080, pero para esta ocasion, ya que nuestra api estara corriendo en el puerto 8080, definiremos que estaremos usando el puerto 8080 interno de nuestro contenedor, expuesto en el puerto 3030 de nuestro ordenador.</p>
+<aside class="warning"><h3 is-upgraded>⚠️ Aclaracion</h3>
+<p>Por lo general, los puertos utilizados para Keycloak son el 8080:8080, pero para esta ocasion, ya que nuestra api estara corriendo en el puerto 8080, definiremos que estaremos usando el puerto 8080 interno de nuestro contenedor, expuesto en el puerto 3030 de nuestro ordenador.</p>
 </aside>
+<h2 is-upgraded>Acceso a la terminal administrativa</h2>
+<p>La primera vez que realicemos este proceso, puede que tarde un poco, ya que se tendra que descargar la imagen a utilizar. Una vez que la imagen haya sido descargada y que la instancia este corriendo, accederemos a la siguiente ruta</p>
+<p><a href="http://localhost:3030/admin" target="_blank">Ruta de la instancia</a></p>
+<p>En la que debera verse la siguiente pantalla <img alt="alt-text-here" src="img/b948df5b49f74f2c.png"></p>
 <p><strong>Listas</strong></p>
 <ul>
 <li>how to set the amount of time each slide will take to finish</li>
