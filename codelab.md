@@ -289,7 +289,7 @@ Y los roles de nuestro cliente deberian quedar de la siguiente forma:
 > Todas estas configuraciones serviran para que podamos autenticar usuarios de devolverles su token y algunas otras propiedades que configuraremos mas adelante.
 > Al mismo tiempo, estas configuraciones tienen la capacidad de no darle tanto poder administrativo a nuestro client y que solo tenga la capacidad de manejar cosas escenciales
 
-## Configuracion de proyecto con SpringBoot
+## Inicializando un nuevo proyecto
 
 ### Nuevas dependencias
 Ya hemos configurado correctamente nuestro Keycloak para que podamos hacer peticiones desde nuestro backend. Pero nuestro backend aun no esta implementado.
@@ -318,20 +318,18 @@ Presionamos **Create** y esperamos a que neustro proyecto haga su build
 > #### ⚠️ Advertencia
 > Si por alguna razon los setters o getters les llegaran a problemas, cambiar la dependencia de lombok por lo siguiente:
 > ```xml
-> <dependencies>
 > 	<dependency>
 >		<groupId>org.projectlombok</groupId>
 >		<artifactId>lombok</artifactId>
 >		<version>1.18.38</version>
 >		<scope>provided</scope>
 >	</dependency>
-></dependencies>
 >```
 >```xml
->    <plugin>
->		<groupId>org.apache.maven.plugins</groupId>
->		<artifactId>maven-compiler-plugin</artifactId>
->		<configuration>
+>   <plugin>
+>	    <groupId>org.apache.maven.plugins</groupId>
+>	    <artifactId>maven-compiler-plugin</artifactId>
+>	    <configuration>
 >			<annotationProcessorPaths>
 >				<path>
 >					<groupId>org.projectlombok</groupId>
@@ -342,3 +340,65 @@ Presionamos **Create** y esperamos a que neustro proyecto haga su build
 >		</configuration>
 >	</plugin>
 > ```
+
+
+## Configurando proyecto de SpringBoot
+
+### Application.yml
+Una vez inicializado nuestro proyecto, procederemos a hacer las configuraciones de nuestra api, usando para esto el application.yml (se puede usar tambien el application.properties).
+En el cual incluiremos el siguiente codigo
+
+```yml
+server:
+  port: 8080
+spring:
+  application:
+    name: demo-keycloak
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:3030/realms/NOMBRE-DE-TU-REALM
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/TU-BASE-DE-DATOS
+    username: TU-USUARIO-DE-POSTGRES
+    password: TU-CONTRASENA-DE-TU-USUARIO-DE-POSTGRES
+
+keycloak:
+  server-url: http://localhost:3030
+  realm: NOMBRE-DE-TU-REALM
+  client-id: NOMBRE-DE-TU-CLIENT
+  client-secret: TU-CLIENT-SECRET
+  ```
+>aside negative
+> #### ⚠️ Importante
+> Esto dependera tambien de que bases de datos estes usando, y donde hayas hecho el host de tu instancia de keycloak.
+
+### Client secret
+Aca vemos algo muy importante, es que que en nuestro application.yml se nos pide el siguiente dato:
+```yml
+  client-secret: TU-CLIENT-SECRET
+```
+¿De donde lo sacamos?
+Es muy sencillo, nos dirigimos a nuestra ventana administrativa de Keycloak, vamos a la seccion de **Clients**, damos clic en el cliente que creamos y nos movemos a la seccion de **Credentials** en donde nos mostrara esta pantalla:
+
+![alt text](./images/Credentials.png)
+
+Si vemos, hay un campo que se llama **Client Secret**.
+Esta es una contrasena segura que Keycloak ha generado para nuestro cliente, podemos utilizar la que ya tenemos asignada, o regenerarla en caso de ser necesario.
+Para nuestra prueba, solo daremos al boton con el icono de **Copiar** y ese sera el secret que pondremos en nuestro application.yml
+
+>aside negative
+> #### ⚠️ Tomar en cuenta
+> El apartado de Keycloak en nuestro application.yml no es algo que traiga por defecto, son propiedades personalizadas que hemos creado, a las cuales podemos acceder de la misma manera que a las demas.
+
+>aside positive
+> #### ✅Configuracion realizada con exito
+> Si al correr nuestra aplicacion de java no obtenemos ningun error, es porque nuestro application.yml no contiene ningun error.
