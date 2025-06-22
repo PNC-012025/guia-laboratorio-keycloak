@@ -245,7 +245,7 @@ Damos al boton **Next**, acto seguido,  damos en el boton de **Save**
 > aside positive
 > #### ✅ Client creado con exito.
 
-## Definicion de roles en Client
+## Definicion de roles en Realm
 ### Realm roles vs Client Roles
 Ahora que ya hemos creado nuestro client y nuestro realm, hay que definir que roles existiran dentro de nuestro ecosistema.
 Y es aquin en donde entra la pregunta ¿En donde los creo?. Ya que si nos dirigimos a la barra lateral izquierda, podemos ver la seccion llamada "Real Roles". Pero si nos vamos a la seccion de clientes y seleccionamos el que creamos con anterioridad, veremos que tambien hay un apartado de roles.
