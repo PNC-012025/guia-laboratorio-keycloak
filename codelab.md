@@ -401,4 +401,85 @@ Para nuestra prueba, solo daremos al boton con el icono de **Copiar** y ese sera
 
 >aside positive
 > #### ✅Configuracion realizada con exito
-> Si al correr nuestra aplicacion de java no obtenemos ningun error, es porque nuestro application.yml no contiene ningun error.
+> Si al correr nuestra aplicacion de java no obtenemos ninguna excepcion, es porque nuestro application.yml no contiene ningun error.
+
+
+## OpenFeign
+### ¿Que es OpenFeign?
+OpenFeign es un cliente HTTP declarativo que forma parte del ecosistema Spring Cloud. Permite simplificar la creación de clientes RESTful en aplicaciones Spring Boot, especialmente en el contexto de microservicios. Con OpenFeign, en lugar de escribir código para construir solicitudes HTTP manualmente, se definen interfaces con anotaciones que representan los servicios remotos que se van a consumir. Spring Cloud OpenFeign se encarga de generar la implementación de estas interfaces, simplificando la comunicación entre microservicios. 
+
+### ¿Como se usa?
+Como su concepto lo dice, se usa a traves de la declaracion de interfaces y anotaciones del entorno de Spring, un poco parecido a como se hace en los controladores.
+
+Para esto, primero debemos decirle a nuestra aplicacion de java que queremos habilitar los clientes de OpenFeign en nuestro entorno. 
+
+Nos dirigiremos a la MainApplication (O como le hayan puesto de nombre a su proyecto) y agregaremos la siguiente linea en las anotaciones:
+
+```java
+@EnableFeignClients
+```
+Y nuestro MainApplication quedara tal que asi:
+```java
+@SpringBootApplication
+@EnableFeignClients
+public class DemoKeycloakApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoKeycloakApplication.class, args);
+    }
+
+}
+```
+Ahora ya podemos crear interfaces que hagan una conexion con otra API o microservicio que queremos consumir. Para ello, la logica es un poco parecida a la que hacemos con SpringBoot y los controladores.
+
+Definimos el tipo de las funciones segun el body que queremos recibir de nuestra peticion.
+
+Como un ejemplo basico sobre hacer peticiones con OpenFeign, simularemos una peticion a la PokeApi y el cuerpo de lo que queremos recibir.
+
+Haremos una peticion de un pokemon al siguiente enlace [https://pokeapi.co/api/v2/pokemon/Rayquaza](https://pokeapi.co/api/v2/pokemon/Rayquaza)
+
+En donde **Rayquaza** sera el nombre del pokemon que recibiremos como parametro.
+
+Primero, definiremos un DTO que sera utilizado para recibir el body de nuestra peticion, en esta ocasion, solo utilizaremos los siguientes datos
+- Nombre
+- id
+- Experiencia base
+- Peso
+
+Consultando la documentacion de la PokeAPI, sabremos que tendremos que construir un DTO que contenga las siguientes propiedades:
+
+```java
+@Data
+public class Pokemon {
+    @JsonProperty("id")
+    private Integer pokemonId;
+    @JsonProperty("name")
+    private String pokemonName;
+    @JsonProperty("base_experience")
+    private Integer baseExperience;
+    @JsonProperty("weight")
+    private Integer weight;
+}
+```
+
+Los nombres de los atributos en nuestra clase es como los queremos consultar cuando trabajemos con sus getters y setters, y las que estan en la anotacion de **@JsonProperty** Es como sabemos que respondera nuestra API o Microservicio al que estamos consultando.
+
+Una vez definido el body que recibiremos cuando hagamos una peticion, tendremos que hacer nuestra interfaz para consultar a la API o Microservicio fuente.
+
+Crearemos para ello se crea una nueva interfaz con el nombre deseado y con la siguiente base:
+
+```java
+@FeignClient(name = "pokemon-example", url = "https://pokeapi.co/api/v2/pokemon")
+public interface iPokemonExample {
+
+    @GetMapping("/{pokemonName}")
+    public Pokemon getPokemon(@PathVariable("pokemonName") String pokemonName);
+
+}
+```
+
+Al solicitrar esa interfaz en algun controlador de java o servicio, deberiamos obtener el pokemon deseado a partir de los parametros que reciba la funcion.
+
+>aside positive
+> #### ✅Nueva tecnologia
+> Ahora ya sabemos un poco acerca del uso de OpenFeign y como se hacen peticiones a otras API's o Microservicios
