@@ -228,9 +228,9 @@ no temporal" duration="0">
 <li>Realm roles Se utiliza cuando queremos que nuestros roles tengan un alcance global en nuestro realm, es decir, independientemente el cliente que se conecte a nuestro realm, los roles seran los mismos</li>
 <li>Client roles Se utiliza cuando se quieren que los roles solo sean creados para un cliente en especifico.</li>
 </ul>
-<p>En esta ocasion, ya que estamos haciendo un patron BFF y el unico que podra acceder a nuestro Keycloak, es nuestra API a traves de su cliente, optaremos por crear roles en nuestro cliente.</p>
-<p>Para ello, nos dirigimos a la seccion de <strong>Clients</strong> hacemos clic en el que hemos creado, vamos al apartado de <strong>Roles</strong>, damos clic en <strong>Create role</strong> y creamos uno. Ejemplo:</p>
-<p class="image-container"><img alt="alt-text-here" src="img/349c48631fea06b2.png"></p>
+<p>En esta ocasion, usaremos Realm Roles, ya que son mas faciles de manejar</p>
+<p>Para ello, nos dirigimos a la seccion de <strong>Realm Roles</strong>, damos clic en <strong>Create role</strong> y creamos uno. Ejemplo:</p>
+<p class="image-container"><img alt="alt-text-here" src="img/a0fe16271b3eb732.png"></p>
 <h2 is-upgraded>Nuestro cliente y sus roles</h2>
 <p>Hemos visto como crear roles para los usuarios que estara registrandose en nuestra API, pero aun no sabemos que permisos tiene nuestro cliente, ya que, si este estara conectandose mediante algun metodo con Keycloak, tambien necesito algun metodo de autenticacion y por ende, sus propios roles. Su metodo de autenticacion ya ha sido definido cuando lo creamos, mediante un <strong>Client secret</strong>. Pero sus roles propios no han sido definidos en ningun momento.</p>
 <p>Para ello, en la pantalla de nuestro Client, nos dirigiremos al apartado de <strong>Service Accounts Roles</strong>, la cual nos mostrara la pantalla siguiente:</p>
@@ -414,6 +414,327 @@ public interface iPokemonExample {
 <aside class="special"><h3 is-upgraded>✅Nueva tecnologia</h3>
 <p>Ahora ya sabemos un poco acerca del uso de OpenFeign y como se hacen peticiones a otras API&#39;s o Microservicios</p>
 </aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Usando Keycloak con SpringBoot" duration="0">
+        <h2 is-upgraded>Autenticacion del cliente</h2>
+<p>Ya que hemos aprendido como usar un poco OpenFeign, la teoria acerca de Keycloak y ya teniendo creados, nuestro realm, nuestro cliente y asignado los roles necesarios a nuestro cliente. El siguiente paso es hacer que nuestro cliente se pueda autenticar contra Keycloak y nos permita hacer peticiones para crear usuarios o que estos puedan consultar su token.</p>
+<p>En primera instancia, configuraremos la conexion entre nuestro cliente backend y keycloak</p>
+<h2 is-upgraded>Creando carpetas</h2>
+<p>Para ello necesitaremos algunas carpetas adicionales. Como sabemos, comunmente estamos trabajando con</p>
+<ul>
+<li>Controller</li>
+<li>Service <ul>
+<li>ServiceImpl</li>
+</ul>
+</li>
+<li>Repository</li>
+<li>Domain <ul>
+<li>Entity</li>
+<li>DTO</li>
+</ul>
+</li>
+<li>Configuration o Config</li>
+</ul>
+<p>Ahora agregaremos algunas carpetas mas</p>
+<ul>
+<li>Client <ul>
+<li>Keycloak (dentro de Client)</li>
+</ul>
+</li>
+<li>Configuration o Config <ul>
+<li>Keycloak (dentro de Config o Configuration)</li>
+<li>SpringSecurity (dentro de Config o Configuration)</li>
+</ul>
+</li>
+</ul>
+<h2 is-upgraded>Domain - DTO</h2>
+<p>Antes de definir el metodo con el cual estaremos recibiendo tokens y enviandolos en nuestras peticiones a Keycloak, necesitamos definir cque recibiran o enviaran estas peticiones. Para ello crearemos nuestro DTO principal, con la siguiente forma:</p>
+<pre><code language="language-java" class="language-java">@Data
+public class KeycloakTokenResponse {
+    @JsonProperty(&#34;access_token&#34;)
+    private String accessToken;
+    @JsonProperty(&#34;expires_in&#34;)
+    private String expiresIn;
+    @JsonProperty(&#34;token_type&#34;)
+    private String tokenType;
+}
+</code></pre>
+<p>Este DTO permitira que Keycloak nos transmita nuestro token, el tiempo de expiracion y el tipo.</p>
+<h2 is-upgraded>Config - Keycloak</h2>
+<p>Ahora necesitamos definir algunas configuraciones principales para la conexion a Keycloak.</p>
+<p>Primero, necesitamos crear un objeto el cual sera el encargado de almacenar nuestras propiedades de Keycloak almacenadas en nuestro application.yml</p>
+<p>En primer lugar, necesitamos indicarle a nuestra aplicacion que queremos permitir el acceso a nuestro application.yml a traves de clases.</p>
+<p>Esto se hara desde nuestro MainApplication con la anotacion:</p>
+<pre><code language="language-java" class="language-java">@ConfigurationPropertiesScan
+</code></pre>
+<p>Spring Boot, por defecto, no escanea automáticamente las clases anotadas con @ConfigurationProperties si no están registradas como beans (por ejemplo, con @Component o en un @Bean en una clase @Configuration)</p>
+<p>Asi que esto solucionara ese problema</p>
+<p>haciendo que nuestro MainApplication ahora tenga la siguiente estructura:</p>
+<pre><code language="language-java" class="language-java">@SpringBootApplication
+@EnableFeignClients
+@ConfigurationPropertiesScan
+public class DemoKeycloakApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoKeycloakApplication.class, args);
+    }
+
+}
+</code></pre>
+<h3 is-upgraded>KeycloakProperties</h3>
+<p>Una vez realizada esta configuracion, ahora si procederemos a crear un archivo llamado <strong>KeycloakProperties</strong> dentro de Config -&gt; Keycloak, el cual tendra el siguiente bloque de codigo:</p>
+<pre><code language="language-java" class="language-java">@ConfigurationProperties(prefix = &#34;keycloak&#34;)
+@Data
+public class KeycloakProperties {
+    private String serverUrl;
+    private String clientId;
+    private String clientSecret;
+    private String realm;
+}
+</code></pre>
+<p>Esto extraera automaticamente las propiedades en nuestro application.yml y los inyectara en esa clase cada vez que se use.</p>
+<h3 is-upgraded>KeycloakAuthFeignConfig</h3>
+<p>El archivo KeycloakAuthFeignConfig configura cómo Feign (OpenFeign) enviará datos codificados en formularios (application/x-www-form-urlencoded), que es el formato requerido por Keycloak para obtener el token de acceso (en el flujo de password o client_credentials).</p>
+<p>Este archivo tiene las siguientes funciones principales:</p>
+<ul>
+<li>Permite que Feign haga login correctamente en Keycloak</li>
+<li>Convierte peticiones Java a x-www-form-urlencoded (formato necesario para keycloak)</li>
+</ul>
+<p>Sabiendo la funcionalidad que tendra este archivo, procederemos a crearlo, teniendo este la siguiente estructura:</p>
+<pre><code language="language-java" class="language-java">@Configuration
+public class KeycloakAuthFeignConfig {
+
+    private final ObjectFactory&lt;HttpMessageConverters&gt; messageConverters;
+
+    public KeycloakAuthFeignConfig(ObjectFactory&lt;HttpMessageConverters&gt; messageConverters) {
+        this.messageConverters = messageConverters;
+    }
+
+    @Bean
+    public FormEncoder feignFormEncoder() {
+        return new FormEncoder(new SpringEncoder(this.messageConverters));
+    }
+}
+</code></pre>
+<h2 is-upgraded>Client - Keycloak</h2>
+<p>Antes de seguir creando archivos de configuracion, necesitamos crear nuestro metodo para obtener el token de Keycloak con OpenFeign (este metodo aplica tanto para clientes como para usuarios normales)</p>
+<h3 is-upgraded>iKeycloakAuthClient</h3>
+<p>Procederemos a crear nuestra primera interfaz de autenticacion con la cual obtendremos el token de un usuario/client deseado. Archivo para el cual usaremos la siguiente estructura:</p>
+<pre><code language="language-java" class="language-java">//Define un cliente de OpenFeign con el nombre keycloak-service en la url donde esta almacenado nuestra instancia de Keycloak
+//La linea de configuration permite interceptar la peticion y configurar el formato a uno valido para Keycloak
+@FeignClient(name = &#34;keycloak-service&#34;, url = &#34;${keycloak.server-url}&#34;, configuration = KeycloakAuthFeignConfig.class)
+public interface iKeycloakAuthClient {
+    // Metodo de tipo post realizado a nuestro realm, mediante el protocolo openid-connect que obtendra un token y envia un Body de tipo MultiValueMap&lt;String, String&gt; con el nombre formData. Esta funcion devuelve un KeycloakTokenResponse, definido anteriormente
+    @PostMapping(value = &#34;/realms/${keycloak.realm}/protocol/openid-connect/token&#34;, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public KeycloakTokenResponse getToken(@RequestBody MultiValueMap&lt;String, String&gt; formData);
+
+}
+</code></pre>
+<h2 is-upgraded>Config - Keycloak</h2>
+<p>Volviendo a nuestro paquete de configuraciones de Keycloak, ahora necesitamos crear alguna forma de interceptar nuestras peticiones para que estas puedan obtener un token valido para nuestro cliente y podamos realizar operaciones asociadas a nuestros roles como cliente</p>
+<h3 is-upgraded>KeycloakFeignInterceptorConfig</h3>
+<p>Este archivo permitira, cada vez que se haga una peticion, obtener un token valido para nuestro cliente (Solo cuando se tengan que hacer proceso administrativos como crear clientes).</p>
+<p>Este tendra la siguiente estructura:</p>
+<pre><code language="language-java" class="language-java">@Configuration
+@RequiredArgsConstructor
+public class KeycloakFeignInterceptorConfig {
+    // A traves de keycloakAuthClient podemos acceder al metodo getToken
+    private final iKeycloakAuthClient keycloakAuthClient;
+    // Obtenemos las properties asociadas en nuestro application.yml
+    private final KeycloakProperties keycloakProperties;
+
+    @Bean
+    public RequestInterceptor getKeycloakAuthInterceptor() {
+        return requestTemplate -&gt; {
+            //devolvemos una requestTemplate con un MultiValueMap&lt;String, String&gt; que contendra los siguientes valores
+            MultiValueMap&lt;String, String&gt; form = new LinkedMultiValueMap&lt;&gt;();
+            // El Id de nuestro Client en Keycloak
+            form.add(&#34;client_id&#34;, keycloakProperties.getClientId());
+            // El Secret de nuestro Client en Keycloak
+            form.add(&#34;client_secret&#34;, keycloakProperties.getClientSecret());
+            //Especificamos que el tipo de entidad que se esta autenticando es un client mediante client credentials
+            form.add(&#34;grant_type&#34;, &#34;client_credentials&#34;);
+
+            //Obtenemos un token valido para nuestro cliente
+            KeycloakTokenResponse token = keycloakAuthClient.getToken(form);
+
+            //Lo inyectamos en el header de nuestra peticion
+            requestTemplate.header(&#34;Authorization&#34;, &#34;Bearer &#34; + token.getAccessToken());
+        };
+    }
+}
+</code></pre>
+<h2 is-upgraded>Client - Keycloak</h2>
+<h3 is-upgraded>iKeycloakAdminClient</h3>
+<p>Una vez creada la logica para la intercepcion de peticiones a Keycloak y como autenticar a nuestro cliente, necesitamos crear el metodo para registrar usuarios en nuestra instancia. Para ello, crearemos una interfaz con OpenFeign que nos permitira realizar este proceso. Esta interfaz tendra la siguiente estructura:</p>
+<pre><code language="language-java" class="language-java">///Define un cliente de Feign llamado feign-admin que apunta al url donde esta nuestra instancia de Keycloak y mediante configuracion, permitira que la peticion sea interceptada y se pueda inyectar un token valido para nuestro cliente
+@FeignClient(name = &#34;feign-admin&#34;, url = &#34;${keycloak.server-url}&#34;, configuration = KeycloakFeignInterceptorConfig.class)
+public interface iKeycloakAdminClient {
+    //Metodo post realizado al realm que hemos creado al apartado de users que nos devolvera una Response de Feign (Asegurar que la importacion de Response venga de import feign.Response)
+    @PostMapping(&#34;/admin/realms/${keycloak.realm}/users&#34;)
+    Response createUser(@RequestBody Map&lt;String, Object&gt; user);
+}
+</code></pre>
+<h2 is-upgraded>Config - SpringSecurity</h2>
+<h3 is-upgraded>SecurityConfig</h3>
+<p>Muy probablemente, si implementamos un controlador e intentamos acceder a el, obtendremos Unauthorized en nuestras peticiones. Y es que a pesar de tener configurada la emision de JWT con Keycloak, aun no hemos definido que rutas estaran o no protegidas para ciertos roles o momentos. Para ello, configuraremos el Security de Spring de la siguiente manera. Procedemos a crear el archivo SpringSecurity, el cual tendra la siguiente estructura:</p>
+<pre><code language="language-java" class="language-java">@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -&gt; auth
+                        .requestMatchers(&#34;/api/demo/register&#34;,&#34;/api/demo/login&#34; , &#34;/public/**&#34;).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2ResourceServer(resource -&gt; resource.jwt(jwt -&gt; jwt.jwtAuthenticationConverter(new JwtAuthConverter())));
+        return http.build();
+    }
+}
+</code></pre>
+<p>Donde en <strong>RequestMatchers</strong>.permitAll(), se encontraran todas las rutas que deseamos dejar abiertas.</p>
+<aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
+<p>Probablemente este ultimo codigo nos de error, para ello, necesitamos crear unos cuantos archivos que se detallan en la siguiente pagina</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Otros archivos necesarios" duration="0">
+        <h2 is-upgraded>Service</h2>
+<pre><code language="language-java" class="language-java">public interface iAuthService {
+
+    KeycloakTokenResponse register(CreateUserDTO user) throws Exception;
+    KeycloakTokenResponse login(String username, String password);
+}
+</code></pre>
+<h3 is-upgraded>Service - ServiceImpl</h3>
+<pre><code language="language-java" class="language-java">@Service
+@RequiredArgsConstructor
+public class AuthServiceImpl implements iAuthService {
+
+    private final iKeycloakAdminClient keycloakAdminClient;
+    private final iKeycloakAuthClient keycloakAuthClient;
+    private final KeycloakProperties keycloakProperties;
+
+    @Override
+    public KeycloakTokenResponse register(CreateUserDTO user) throws Exception {
+        Response response = keycloakAdminClient.createUser(createUserDtoToMap(user));
+        if (response.status() != 201) throw new Exception(&#34;Failed to create user: &#34; + new String(response.body().asInputStream().readAllBytes(), StandardCharsets.UTF_8));
+        String userId = getUserIdFromKeycloakResponse(response);
+        return login(user.getUserName(), user.getPassword());
+    }
+
+    @Override
+    public KeycloakTokenResponse login(String username, String password) {
+        return keycloakAuthClient.getToken(loginToFormData(username, password, keycloakProperties.getClientId(), keycloakProperties.getClientSecret()));
+    }
+}
+</code></pre>
+<h2 is-upgraded>Utils</h2>
+<pre><code language="language-java" class="language-java">public class UserIdFromKeycloak {
+    public static String getUserIdFromKeycloakResponse(Response response){
+        String location = response.headers().get(&#34;Location&#34;).stream()
+                .findFirst()
+                .orElseThrow(() -&gt; new RuntimeException(&#34;Location header not found in response&#34;));
+        return location.substring(location.lastIndexOf(&#34;/&#34;) + 1);
+    }
+}
+</code></pre>
+<h2 is-upgraded>Utils - Mappers</h2>
+<pre><code language="language-java" class="language-java">public class GeneralMappers {
+    public static Map&lt;String, Object&gt; createUserDtoToMap(CreateUserDTO user) {
+        return Map.of(
+                &#34;username&#34;, user.getUserName(),
+                &#34;email&#34;, user.getEmail(),
+                &#34;firstName&#34;, user.getFirstName(),
+                &#34;lastName&#34;, user.getLastName(),
+                &#34;enabled&#34;, true,
+                &#34;emailVerified&#34;, true,
+                &#34;credentials&#34;, List.of(Map.of(&#34;type&#34;, &#34;password&#34;, &#34;value&#34;, user.getPassword(), &#34;temporary&#34;, false))
+        );
+    }
+
+    public static MultiValueMap&lt;String, String&gt; loginToFormData(String username, String password, String clientId, String clientSecret) {
+        MultiValueMap&lt;String, String&gt; formData = new LinkedMultiValueMap&lt;&gt;();
+        formData.add(&#34;username&#34;, username);
+        formData.add(&#34;password&#34;, password);
+        formData.add(&#34;grant_type&#34;, &#34;password&#34;);
+        formData.add(&#34;client_id&#34;, clientId);
+        formData.add(&#34;client_secret&#34;, clientSecret);
+        return formData;
+    }
+}
+</code></pre>
+<h2 is-upgraded>Domain</h2>
+<h3 is-upgraded>Domain - DTO</h3>
+<pre><code language="language-java" class="language-java">@Data
+public class CreateUserDTO {
+    @JsonProperty(&#34;username&#34;)
+    private String userName;
+    @JsonProperty(&#34;email&#34;)
+    private String email;
+    @JsonProperty(&#34;first_name&#34;)
+    private String firstName;
+    @JsonProperty(&#34;last_name&#34;)
+    private String lastName;
+    @JsonProperty(&#34;password&#34;)
+    private String password;
+}
+</code></pre>
+<h2 is-upgraded>Controller</h2>
+<pre><code language="language-java" class="language-java">@RestController
+@RequiredArgsConstructor
+@RequestMapping(&#34;/api/demo&#34;)
+public class DemoController {
+    private final iAuthService authService;
+
+    @PostMapping(&#34;/register&#34;)
+    public ResponseEntity&lt;KeycloakTokenResponse&gt; register(@RequestBody @Valid CreateUserDTO user) throws Exception {
+        return ResponseEntity.ok(authService.register(user));
+    }
+
+    @PostMapping(&#34;/login&#34;)
+    public ResponseEntity&lt;KeycloakTokenResponse&gt; login(@RequestParam(&#34;username&#34;) String username, @RequestParam(&#34;password&#34;) String password) {
+        return ResponseEntity.ok(authService.login(username, password));
+    }
+    @PreAuthorize(&#34;hasRole(&#39;role-user&#39;)&#34;)
+    @GetMapping(&#34;/auth-test&#34;)
+    public ResponseEntity&lt;String&gt; test() {
+        return ResponseEntity.ok(&#34;Test endpoint is working!&#34;);
+    }
+}
+</code></pre>
+<h2 is-upgraded>Configuration</h2>
+<h3 is-upgraded>Configuration - SpringSecurity</h3>
+<pre><code language="language-java" class="language-java">public class JwtAuthConverter extends JwtAuthenticationConverter {
+    public JwtAuthConverter() {
+        JwtGrantedAuthoritiesConverter delegate = new JwtGrantedAuthoritiesConverter();
+        delegate.setAuthoritiesClaimName(&#34;realm_access.roles&#34;);
+        delegate.setAuthorityPrefix(&#34;ROLE_&#34;);
+        this.setJwtGrantedAuthoritiesConverter(delegate);
+    }
+}
+</code></pre>
+<aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
+<p>Si necesitas una descripcion mas detallada acerca de los ultimos archivos creados, hacelo saber a tu instructor para que pueda ayudarte</p>
+</aside>
+<aside class="special"><h3 is-upgraded>✅Keycloak Implementado</h3>
+<p>Hemos visto paso a paso la implementacion de Keycloak con SpringBoot. Con esta estructura basica, ya puedes aplicar tu logica de negocios y hacer diferentes procesos para tus usuarios.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Ejercicio practico" duration="0">
+        <h2 is-upgraded>Definir roles por defecto</h2>
+<p>Como tal, a un nuevo usuario creado, nunca se le asigna uno de los roles que nosotros hemos creado, por lo cual, no podemos verificar que posea ese rol. Tu tarea como desarrollador es investigar acerca de como asignarle un rol por defecto a todos los usuarios (Recordar que estamos usando Realm Roles). Y tambien como asignar o remover roles de un usuario.</p>
 
 
       </google-codelab-step>
