@@ -259,7 +259,7 @@ no temporal" duration="0">
 
       </google-codelab-step>
     
-      <google-codelab-step label="Configuracion de proyecto con SpringBoot" duration="0">
+      <google-codelab-step label="Inicializando un nuevo proyecto" duration="0">
         <h2 is-upgraded>Nuevas dependencias</h2>
 <p>Ya hemos configurado correctamente nuestro Keycloak para que podamos hacer peticiones desde nuestro backend. Pero nuestro backend aun no esta implementado. Para esto, necesitaremos inicializar un nuevo proyecto con algunas dependencias nuevas y unas nuevas configuraciones. Primero, iniciaremos un proyecto con las mismas caracteristicas que hemos usado con anterioridad</p>
 <aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
@@ -277,19 +277,17 @@ no temporal" duration="0">
 <p>Presionamos <strong>Create</strong> y esperamos a que neustro proyecto haga su build</p>
 <aside class="warning"><h3 is-upgraded>⚠️ Advertencia</h3>
 <p>Si por alguna razon los setters o getters les llegaran a problemas, cambiar la dependencia de lombok por lo siguiente:</p>
-<pre><code language="language-xml" class="language-xml">&lt;dependencies&gt;
-	&lt;dependency&gt;
+<pre><code language="language-xml" class="language-xml">	&lt;dependency&gt;
   	&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
   	&lt;artifactId&gt;lombok&lt;/artifactId&gt;
   	&lt;version&gt;1.18.38&lt;/version&gt;
   	&lt;scope&gt;provided&lt;/scope&gt;
   &lt;/dependency&gt;
-&lt;/dependencies&gt;
 </code></pre>
-<pre><code language="language-xml" class="language-xml">   &lt;plugin&gt;
-  	&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-  	&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-  	&lt;configuration&gt;
+<pre><code language="language-xml" class="language-xml">  &lt;plugin&gt;
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+      &lt;configuration&gt;
   		&lt;annotationProcessorPaths&gt;
   			&lt;path&gt;
   				&lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
@@ -300,6 +298,57 @@ no temporal" duration="0">
   	&lt;/configuration&gt;
   &lt;/plugin&gt;
 </code></pre>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configurando proyecto de SpringBoot" duration="0">
+        <h2 is-upgraded>Application.yml</h2>
+<p>Una vez inicializado nuestro proyecto, procederemos a hacer las configuraciones de nuestra api, usando para esto el application.yml (se puede usar tambien el application.properties). En el cual incluiremos el siguiente codigo</p>
+<pre><code language="language-yml" class="language-yml">server:
+  port: 8080
+spring:
+  application:
+    name: demo-keycloak
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:3030/realms/NOMBRE-DE-TU-REALM
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/TU-BASE-DE-DATOS
+    username: TU-USUARIO-DE-POSTGRES
+    password: TU-CONTRASENA-DE-TU-USUARIO-DE-POSTGRES
+
+keycloak:
+  server-url: http://localhost:3030
+  realm: NOMBRE-DE-TU-REALM
+  client-id: NOMBRE-DE-TU-CLIENT
+  client-secret: TU-CLIENT-SECRET
+</code></pre>
+<aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
+<p>Esto dependera tambien de que bases de datos estes usando, y donde hayas hecho el host de tu instancia de keycloak.</p>
+</aside>
+<h2 is-upgraded>Client secret</h2>
+<p>Aca vemos algo muy importante, es que que en nuestro application.yml se nos pide el siguiente dato:</p>
+<pre><code language="language-yml" class="language-yml">  client-secret: TU-CLIENT-SECRET
+</code></pre>
+<p>¿De donde lo sacamos? Es muy sencillo, nos dirigimos a nuestra ventana administrativa de Keycloak, vamos a la seccion de <strong>Clients</strong>, damos clic en el cliente que creamos y nos movemos a la seccion de <strong>Credentials</strong> en donde nos mostrara esta pantalla:</p>
+<p class="image-container"><img alt="alt text" src="img/59fa6b79be750592.png"></p>
+<p>Si vemos, hay un campo que se llama <strong>Client Secret</strong>. Esta es una contrasena segura que Keycloak ha generado para nuestro cliente, podemos utilizar la que ya tenemos asignada, o regenerarla en caso de ser necesario. Para nuestra prueba, solo daremos al boton con el icono de <strong>Copiar</strong> y ese sera el secret que pondremos en nuestro application.yml</p>
+<aside class="warning"><h3 is-upgraded>⚠️ Tomar en cuenta</h3>
+<p>El apartado de Keycloak en nuestro application.yml no es algo que traiga por defecto, son propiedades personalizadas que hemos creado, a las cuales podemos acceder de la misma manera que a las demas.</p>
+</aside>
+<aside class="special"><h3 is-upgraded>✅Configuracion realizada con exito</h3>
+<p>Si al correr nuestra aplicacion de java no obtenemos ningun error, es porque nuestro application.yml no contiene ningun error.</p>
 </aside>
 
 
