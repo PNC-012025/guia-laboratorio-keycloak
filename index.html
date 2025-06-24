@@ -583,6 +583,7 @@ public interface iKeycloakAdminClient {
 <p>Muy probablemente, si implementamos un controlador e intentamos acceder a el, obtendremos Unauthorized en nuestras peticiones. Y es que a pesar de tener configurada la emision de JWT con Keycloak, aun no hemos definido que rutas estaran o no protegidas para ciertos roles o momentos. Para ello, configuraremos el Security de Spring de la siguiente manera. Procedemos a crear el archivo SpringSecurity, el cual tendra la siguiente estructura:</p>
 <pre><code language="language-java" class="language-java">@Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -590,10 +591,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -&gt; auth
-                        .requestMatchers(&#34;/api/demo/register&#34;,&#34;/api/demo/login&#34; , &#34;/public/**&#34;).permitAll()
+                        .requestMatchers(&#34;/api/demo/register&#34;, &#34;/api/demo/login&#34;, &#34;/public/**&#34;).permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(resource -&gt; resource.jwt(jwt -&gt; jwt.jwtAuthenticationConverter(new JwtAuthConverter())));
+                .oauth2ResourceServer(resource -&gt;
+                        resource.jwt(jwt -&gt; jwt.jwtAuthenticationConverter(new JwtAuthConverter())));
         return http.build();
     }
 }
@@ -713,12 +715,18 @@ public class DemoController {
 </code></pre>
 <h2 is-upgraded>Configuration</h2>
 <h3 is-upgraded>Configuration - SpringSecurity</h3>
-<pre><code language="language-java" class="language-java">public class JwtAuthConverter extends JwtAuthenticationConverter {
-    public JwtAuthConverter() {
-        JwtGrantedAuthoritiesConverter delegate = new JwtGrantedAuthoritiesConverter();
-        delegate.setAuthoritiesClaimName(&#34;realm_access.roles&#34;);
-        delegate.setAuthorityPrefix(&#34;ROLE_&#34;);
-        this.setJwtGrantedAuthoritiesConverter(delegate);
+<pre><code language="language-java" class="language-java">public class JwtAuthConverter implements Converter&lt;Jwt, AbstractAuthenticationToken&gt; {
+
+    @Override
+    public AbstractAuthenticationToken convert(Jwt token) {
+        Map&lt;String, Object&gt; realmAccess = token.getClaim(&#34;realm_access&#34;);
+        List&lt;String&gt; roles = (List&lt;String&gt;) realmAccess.get(&#34;roles&#34;);
+        Collection&lt;GrantedAuthority&gt; authorities = roles
+                .stream().
+                map(role -&gt; new SimpleGrantedAuthority(&#34;ROLE_&#34; + role))
+                .collect(Collectors.toList());
+
+        return new JwtAuthenticationToken(token, authorities);
     }
 }
 </code></pre>
