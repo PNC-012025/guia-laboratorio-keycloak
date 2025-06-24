@@ -680,6 +680,7 @@ Procedemos a crear el archivo SpringSecurity, el cual tendra la siguiente estruc
 ```java
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -687,10 +688,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/demo/register","/api/demo/login" , "/public/**").permitAll()
+                        .requestMatchers("/api/demo/register", "/api/demo/login", "/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(resource -> resource.jwt(jwt -> jwt.jwtAuthenticationConverter(new JwtAuthConverter())));
+                .oauth2ResourceServer(resource ->
+                        resource.jwt(jwt -> jwt.jwtAuthenticationConverter(new JwtAuthConverter())));
         return http.build();
     }
 }
@@ -819,12 +821,18 @@ public class DemoController {
 ### Configuration
 #### Configuration - SpringSecurity
 ```java
-public class JwtAuthConverter extends JwtAuthenticationConverter {
-    public JwtAuthConverter() {
-        JwtGrantedAuthoritiesConverter delegate = new JwtGrantedAuthoritiesConverter();
-        delegate.setAuthoritiesClaimName("realm_access.roles");
-        delegate.setAuthorityPrefix("ROLE_");
-        this.setJwtGrantedAuthoritiesConverter(delegate);
+public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+
+    @Override
+    public AbstractAuthenticationToken convert(Jwt token) {
+        Map<String, Object> realmAccess = token.getClaim("realm_access");
+        List<String> roles = (List<String>) realmAccess.get("roles");
+        Collection<GrantedAuthority> authorities = roles
+                .stream().
+                map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .collect(Collectors.toList());
+
+        return new JwtAuthenticationToken(token, authorities);
     }
 }
 ```
