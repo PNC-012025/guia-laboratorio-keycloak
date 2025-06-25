@@ -344,7 +344,7 @@ Presionamos **Create** y esperamos a que neustro proyecto haga su build
 
 ## Configurando proyecto de SpringBoot
 
-### Application.yml
+### application.yml
 Una vez inicializado nuestro proyecto, procederemos a hacer las configuraciones de nuestra api, usando para esto el application.yml (se puede usar tambien el application.properties).
 En el cual incluiremos el siguiente codigo
 
@@ -374,7 +374,7 @@ spring:
 keycloak:
   server-url: http://localhost:3030
   realm: NOMBRE-DE-TU-REALM
-  client-id: NOMBRE-DE-TU-CLIENT
+  client-id: ID-DE-TU-CLIENT
   client-secret: TU-CLIENT-SECRET
   ```
 >aside negative
@@ -548,6 +548,9 @@ Asi que esto solucionara ese problema
 
 haciendo que nuestro MainApplication ahora tenga la siguiente estructura:
 ```java
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
 @SpringBootApplication
 @EnableFeignClients
 @ConfigurationPropertiesScan
@@ -584,6 +587,11 @@ Este archivo tiene las siguientes funciones principales:
 Sabiendo la funcionalidad que tendra este archivo, procederemos a crearlo, teniendo este la siguiente estructura:
 
 ```java
+import feign.form.FormEncoder;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
+
 @Configuration
 public class KeycloakAuthFeignConfig {
 
@@ -678,6 +686,9 @@ Muy probablemente, si implementamos un controlador e intentamos acceder a el, ob
 Para ello, configuraremos el Security de Spring de la siguiente manera.
 Procedemos a crear el archivo SpringSecurity, el cual tendra la siguiente estructura:
 ```java
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -739,6 +750,8 @@ public class AuthServiceImpl implements iAuthService {
 
 ### Utils
 ```java
+import feign.Response;
+
 public class UserIdFromKeycloak {
     public static String getUserIdFromKeycloakResponse(Response response){
         String location = response.headers().get("Location").stream()
@@ -821,6 +834,13 @@ public class DemoController {
 ### Configuration
 #### Configuration - SpringSecurity
 ```java
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
     @Override
