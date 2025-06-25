@@ -304,7 +304,7 @@ no temporal" duration="0">
       </google-codelab-step>
     
       <google-codelab-step label="Configurando proyecto de SpringBoot" duration="0">
-        <h2 is-upgraded>Application.yml</h2>
+        <h2 is-upgraded>application.yml</h2>
 <p>Una vez inicializado nuestro proyecto, procederemos a hacer las configuraciones de nuestra api, usando para esto el application.yml (se puede usar tambien el application.properties). En el cual incluiremos el siguiente codigo</p>
 <pre><code language="language-yml" class="language-yml">server:
   port: 8080
@@ -331,7 +331,7 @@ spring:
 keycloak:
   server-url: http://localhost:3030
   realm: NOMBRE-DE-TU-REALM
-  client-id: NOMBRE-DE-TU-CLIENT
+  client-id: ID-DE-TU-CLIENT
   client-secret: TU-CLIENT-SECRET
 </code></pre>
 <aside class="warning"><h3 is-upgraded>⚠️ Importante</h3>
@@ -473,7 +473,10 @@ public class KeycloakTokenResponse {
 <p>Spring Boot, por defecto, no escanea automáticamente las clases anotadas con @ConfigurationProperties si no están registradas como beans (por ejemplo, con @Component o en un @Bean en una clase @Configuration)</p>
 <p>Asi que esto solucionara ese problema</p>
 <p>haciendo que nuestro MainApplication ahora tenga la siguiente estructura:</p>
-<pre><code language="language-java" class="language-java">@SpringBootApplication
+<pre><code language="language-java" class="language-java">import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+@SpringBootApplication
 @EnableFeignClients
 @ConfigurationPropertiesScan
 public class DemoKeycloakApplication {
@@ -504,7 +507,12 @@ public class KeycloakProperties {
 <li>Convierte peticiones Java a x-www-form-urlencoded (formato necesario para keycloak)</li>
 </ul>
 <p>Sabiendo la funcionalidad que tendra este archivo, procederemos a crearlo, teniendo este la siguiente estructura:</p>
-<pre><code language="language-java" class="language-java">@Configuration
+<pre><code language="language-java" class="language-java">import feign.form.FormEncoder;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
+
+@Configuration
 public class KeycloakAuthFeignConfig {
 
     private final ObjectFactory&lt;HttpMessageConverters&gt; messageConverters;
@@ -581,7 +589,10 @@ public interface iKeycloakAdminClient {
 <h2 is-upgraded>Config - SpringSecurity</h2>
 <h3 is-upgraded>SecurityConfig</h3>
 <p>Muy probablemente, si implementamos un controlador e intentamos acceder a el, obtendremos Unauthorized en nuestras peticiones. Y es que a pesar de tener configurada la emision de JWT con Keycloak, aun no hemos definido que rutas estaran o no protegidas para ciertos roles o momentos. Para ello, configuraremos el Security de Spring de la siguiente manera. Procedemos a crear el archivo SpringSecurity, el cual tendra la siguiente estructura:</p>
-<pre><code language="language-java" class="language-java">@Configuration
+<pre><code language="language-java" class="language-java">import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -640,7 +651,9 @@ public class AuthServiceImpl implements iAuthService {
 }
 </code></pre>
 <h2 is-upgraded>Utils</h2>
-<pre><code language="language-java" class="language-java">public class UserIdFromKeycloak {
+<pre><code language="language-java" class="language-java">import feign.Response;
+
+public class UserIdFromKeycloak {
     public static String getUserIdFromKeycloakResponse(Response response){
         String location = response.headers().get(&#34;Location&#34;).stream()
                 .findFirst()
@@ -715,7 +728,14 @@ public class DemoController {
 </code></pre>
 <h2 is-upgraded>Configuration</h2>
 <h3 is-upgraded>Configuration - SpringSecurity</h3>
-<pre><code language="language-java" class="language-java">public class JwtAuthConverter implements Converter&lt;Jwt, AbstractAuthenticationToken&gt; {
+<pre><code language="language-java" class="language-java">import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+
+public class JwtAuthConverter implements Converter&lt;Jwt, AbstractAuthenticationToken&gt; {
 
     @Override
     public AbstractAuthenticationToken convert(Jwt token) {
